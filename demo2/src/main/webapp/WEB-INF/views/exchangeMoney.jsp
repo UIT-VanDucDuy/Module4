@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ADMIN
-  Date: 9/13/2025
-  Time: 5:24 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -55,7 +49,8 @@
         <br>
         <div class="mt-3 text-end">
             <button type="submit" class="btn btn-primary btn-lg px-4">Đổi</button>
-        </div>    </form>
+        </div>
+    </form>
 </div>
 </body>
 </html>
