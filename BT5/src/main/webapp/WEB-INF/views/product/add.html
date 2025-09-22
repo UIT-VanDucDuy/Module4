@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:insert="~{/layout/layout::library}"/>
+</head>
+<body>
+<div th:replace="~{/layout/layout::header}"></div>
+<h1>Thêm mới</h1>
+<form action="/products/add" method="post" th:object="${product}">
+    Id:
+    <input th:field="*{id}"/><br>
+    Name:
+    <input th:field="*{name}"/><br>
+    Price:
+    <input th:field="*{price}"/><br>
+    Category
+    <select th:field="*{category}">
+        <option value="">---Chọn lớp------</option>
+        <option value="Food">Thức ăn </option>
+        <option value="Type1">Thức Uống</option>
+        <option value="Type2">Thực Phẩm Chức Năng</option>
+    </select><br>
+    Description:
+    <input th:field="*{description}"/><br>
+    <button>Lưu</button>
+</form>
+</body>
+</html>

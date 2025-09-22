@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:insert="~{/layout/layout::library}"/>
+</head>
+<body>
+<div th:replace="~{/layout/layout::header}"></div>
+<h1>Chi tiết</h1>
+ID
+<p th:text="${product.id}"></p>
+Name
+<p th:text="${product.name}"></p>
+</body>
+</html>
