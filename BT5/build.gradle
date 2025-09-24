@@ -26,6 +26,9 @@ dependencies {
     // Spring MVC
     implementation "org.springframework:spring-webmvc:6.2.10"
 
+    implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+
     // Thymeleaf 6 + Spring integration
     implementation "org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE"
     implementation "org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE"

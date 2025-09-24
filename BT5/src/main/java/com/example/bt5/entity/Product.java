@@ -1,8 +1,11 @@
 package com.example.bt5.entity;
 
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Product {
+    @Id
     private int id;
     private String name;
     private int price;
