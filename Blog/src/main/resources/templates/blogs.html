@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Danh sách Blog</title></head>
+<body>
+<h1>Danh sách Blog</h1>
+<a href="/blogs/new">✍ Viết blog mới</a>
+<ul>
+    <li th:each="blog : ${blogs}">
+        <a th:href="@{/blogs/{id}(id=${blog.id})}" th:text="${blog.title}"></a>
+        - <a th:href="@{/blogs/edit/{id}(id=${blog.id})}">Sửa</a>
+        - <a th:href="@{/blogs/delete/{id}(id=${blog.id})}">Xoá</a>
+    </li>
+</ul>
+</body>
+</html>
