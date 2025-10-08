@@ -13,7 +13,7 @@
     <div class="row g-4">
 
         <div class="col-lg-3">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Category</h5>
                     <div th:each="category : ${categories}" class="mb-3 p-2 border rounded">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title mb-3">Danh sách bài viết</h5>
@@ -45,7 +45,7 @@
                         <a th:href="@{/blogs/delete/{id}(id=${blog.id})}" class="text-danger">🗑 Xóa</a>
                     </div>
                 </div>
-                <div class="d-flex text-center">
+                <div class="d-flex justify-content-center gap-2">
                     <a th:if="${blogPage.hasPrevious()}" th:href="@{/blogs(page=${blogPage.number -1})}">Trước</a>
                     <span th:text="${blogPage.number+1}"></span>/<span th:text="${blogPage.totalPages}"></span>
                     <a th:if="${blogPage.hasNext()}" th:href="@{/blogs(page=${blogPage.number +1})}">Sau</a>
@@ -55,7 +55,7 @@
 
         </div>
         <div class="col-lg-3">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title mb-3">✍ Viết bài mới</h5>
                     <form th:action="@{/blogs}" th:object="${newBlog}" method="post">
@@ -86,3 +86,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<style>
+    body{
+        justify-content: ;
+    }
+</style>
