@@ -19,7 +19,9 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    private String summary;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Lob
     private String content;

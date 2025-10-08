@@ -1,8 +1,11 @@
 package com.example.blog.service;
 
 import com.example.blog.entity.Blog;
+import com.example.blog.entity.Category;
 import com.example.blog.repository.IBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +18,8 @@ public class BlogService implements IBlogService {
         this.blogRepository = blogRepository;
     }
 
-    public Blog createBlog(Blog blog) {
-        return blogRepository.save(blog);
-    }
-
     public List<Blog> getAllBlogs() {
         return blogRepository.findAll();
-    }
-
-    public Blog getBlogById(int id) {
-        return blogRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -34,7 +29,7 @@ public class BlogService implements IBlogService {
     public Blog updateBlog(int id, Blog updatedBlog) {
         return blogRepository.findById(id).map(blog -> {
             blog.setTitle(updatedBlog.getTitle());
-            blog.setSummary(updatedBlog.getSummary());
+            blog.setCategory(updatedBlog.getCategory());
             blog.setContent(updatedBlog.getContent());
             return blogRepository.save(blog);
         }).orElse(null);
@@ -46,6 +41,14 @@ public class BlogService implements IBlogService {
             return true; // Xoá thành công
         }
         return false; // Không tồn tại
+    }
+
+    @Override
+    public Page<Blog> getBlogsbyCategory(Category category, Pageable pageable) {
+        if (category == null) {
+            return blogRepository.findAll(pageable);
+        }
+        return blogRepository.getAllBlogsByCategory(category,pageable);
     }
 
 }
