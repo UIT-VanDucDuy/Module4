@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sách</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+
+<div class="container">
+    <h2 th:text="${book.title}">Tên sách</h2>
+    <p>Số lượng còn lại: <span th:text="${book.quantity}">0</span></p>
+
+    <!-- Thông báo thành công / lỗi -->
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Form mượn sách -->
+    <form th:action="@{/books/{id}/borrow(id=${book.id})}" method="post">
+        <button type="submit" class="btn btn-primary"
+                th:disabled="${book.quantity == 0}">Mượn sách</button>
+    </form>
+
+    <br>
+    <a href="/books" class="btn btn-secondar
