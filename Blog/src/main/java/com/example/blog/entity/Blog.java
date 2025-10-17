@@ -3,7 +3,6 @@ package com.example.blog.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ public class Blog {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
     @Lob
     private String content;
     private LocalDateTime createdAt;
