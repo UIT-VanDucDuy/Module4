@@ -1,5 +1,6 @@
 package com.example.songvalidate.controller;
 
+import com.example.songvalidate.Dto.SongDto;
 import com.example.songvalidate.entity.Song;
 import com.example.songvalidate.validate.SongValidate;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class SongController {
         return "song-form";
     }
     @PostMapping("/create")
-    public String saveSong(@ModelAttribute("song") Song Song,
+    public String saveSong(@ModelAttribute("song") SongDto Song,
                            BindingResult bindingResult, Model model) {
         SongValidate validate = new SongValidate();
         validate.validate(Song, bindingResult);
