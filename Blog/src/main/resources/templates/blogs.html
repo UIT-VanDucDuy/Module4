@@ -28,10 +28,9 @@
 
                     <!-- Danh sách category -->
                     <div th:each="category : ${categories}" class="mb-3 p-2 border rounded">
-                        <a th:href="@{/blogs(category=${category.name})}"
-                           th:text="${category.name}"
-                           class="text-decoration-none text-dark btn"
-                           th:classappend="${selectedCategory == category.name} ? 'btn-primary text-white' : ''">
+                        <a href="#" th:text="${category.name}"
+                           data-category="${category.name}"
+                           class="text-decoration-none text-dark btn">
                         </a>
                     </div>
 
@@ -59,23 +58,16 @@
                     </div>
 
                     <!-- Danh sách blog -->
-                    <div th:each="blog : ${blogPage.content}" class="mb-3 p-2 border rounded">
-                        <h5 th:text="${blog.title}"></h5>
-                        <p><b>Loại:</b> <span th:text="${blog.category.name}"></span></p>
-                        <p th:text="${blog.content}"></p>
-                        <a th:href="@{/blogs/delete/{id}(id=${blog.id})}" class="text-danger">🗑 Xóa</a>
+                    <div id="blogList" class="mb-3 p-2 border rounded">
+<!--                        <h5 th:text="${blog.title}"></h5>-->
+<!--                        <p><b>Loại:</b> <span th:text="${blog.category.name}"></span></p>-->
+<!--                        <p th:text="${blog.content}"></p>-->
+<!--                        <a th:href="@{/blogs/delete/{id}(id=${blog.id})}" class="text-danger">🗑 Xóa</a>-->
                     </div>
                 </div>
 
                 <!-- Phân trang -->
-                <div class="d-flex justify-content-center gap-2 mb-3">
-                    <a th:if="${blogPage.hasPrevious()}"
-                       th:href="@{/blogs(page=${blogPage.number -1}, category=${selectedCategory})}">⬅ Trước</a>
-                    <span th:text="${blogPage.number+1}"></span> /
-                    <span th:text="${blogPage.totalPages}"></span>
-                    <a th:if="${blogPage.hasNext()}"
-                       th:href="@{/blogs(page=${blogPage.number +1}, category=${selectedCategory})}">Sau ➡</a>
-                </div>
+                <div id="pagination" class="d-flex justify-content-center gap-2 mb-3"></div>
             </div>
         </div>
 
@@ -121,5 +113,126 @@
         opacity: 0.8;
     }
 </style>
+<script>
+    let currentCategory = ''; // lưu category hiện tại
+    let currentPage = 0;      // lưu trang hiện tại
+
+    function loadBlogs(page = 0, category = '') {
+        currentPage = page;
+        currentCategory = category;
+
+        const url = category
+            ? `/api/blogs?category=${category}&page=${page}`
+            : `/api/blogs?page=${page}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.querySelector('#blogList');
+                container.innerHTML = ''; // clear cũ
+
+                if (data.content.length === 0) {
+                    container.innerHTML = '<p class="text-muted">Chưa có bài viết nào.</p>';
+                } else {
+                    data.content.forEach(blog => {
+                        const div = document.createElement('div');
+                        div.className = 'mb-3 p-2 border rounded';
+                        div.innerHTML = `
+                        <h5>${blog.title}</h5>
+                        <p><b>Loại:</b> ${blog.category.name}</p>
+                        <p>${blog.content}</p>
+                        <a href="#" class="text-danger" onclick="deleteBlog(${blog.id}, event)">🗑 Xóa</a>
+                    `;
+                        container.appendChild(div);
+                    });
+                }
+
+                // render phân trang
+                renderPagination(data);
+            });
+    }
+
+    // Hàm render phân trang
+    function renderPagination(data) {
+        const container = document.querySelector('#pagination');
+        container.innerHTML = '';
+
+        const current = data.number;
+        const total = data.totalPages;
+
+        // Nút Trước
+        if (data.hasPrevious) {
+            const prev = document.createElement('a');
+            prev.href = "#";
+            prev.textContent = "⬅ Trước";
+            prev.addEventListener('click', e => {
+                e.preventDefault();
+                loadBlogs(current - 1, currentCategory);
+            });
+            container.appendChild(prev);
+        }
+
+        // Hiển thị page hiện tại
+        const span = document.createElement('span');
+        span.textContent = ` ${current + 1} / ${total} `;
+        container.appendChild(span);
+
+        // Nút Sau
+        if (data.hasNext) {
+            const next = document.createElement('a');
+            next.href = "#";
+            next.textContent = "Sau ➡";
+            next.addEventListener('click', e => {
+                e.preventDefault();
+                loadBlogs(current + 1, currentCategory);
+            });
+            container.appendChild(next);
+        }
+    }
+
+    // 🟢 Gửi form thêm bài mới qua AJAX
+    document.querySelector('form').addEventListener('submit', e => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const blog = {
+            title: formData.get('title'),
+            content: formData.get('content'),
+            category: { id: formData.get('category') }
+        };
+
+        fetch('/api/blogs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(blog)
+        })
+            .then(res => res.json())
+            .then(() => {
+                e.target.reset();
+                loadBlogs();
+            });
+    });
+
+    // 🟢 Xóa bài viết qua AJAX
+    function deleteBlog(id) {
+        event.preventDefault();
+        if (!confirm('Bạn có chắc muốn xóa bài viết này không?')) return;
+        fetch(`/api/blogs/${id}`, { method: 'DELETE' })
+            .then(() => loadBlogs());
+    }
+
+    // 🟢 Gắn sự kiện click cho danh mục
+    document.querySelectorAll('[data-category]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            const cat = el.getAttribute('data-category');
+            loadBlogs(cat);
+        });
+    });
+
+    // 🟢 Khi trang load lần đầu
+    window.addEventListener('DOMContentLoaded', () => loadBlogs());
+</script>
+
 </body>
 </html>

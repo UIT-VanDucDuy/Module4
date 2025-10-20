@@ -24,22 +24,33 @@ public class BlogRestController {
     }
 
     @GetMapping
-    public Page<Blog> getAllBlogs(
+    public Page<Blog> getBlogs(
+            @RequestParam(required = false) String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        if (category != null && !category.isEmpty()) {
+            Category cat = categoryService.getCategoryByName(category);
+            if (cat == null) {
+                // Nếu category không tồn tại, trả về trang rỗng
+                return Page.empty(pageable);
+            }
+            return blogService.getBlogsbyCategory(cat, pageable);
+        }
+
+        // Nếu không có category -> lấy tất cả
         return blogService.getBlogsbyCategory(null, pageable);
     }
+    @PostMapping
+    public Blog createBlog(@RequestBody Blog blog) {
+        blogService.saveBlog(blog);
+        return blog;
+    }
 
-    @GetMapping("/category/{categoryName}")
-    public Page<Blog> getBlogsByCategory(
-            @PathVariable String categoryName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Category category = categoryService.getCategoryByName(categoryName);
-        return blogService.getBlogsbyCategory(category, pageable);
+    @DeleteMapping("/{id}")
+    public void deleteBlog(@PathVariable int id) {
+        blogService.deleteBlog(id);
     }
 }
