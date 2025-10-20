@@ -221,7 +221,6 @@
             .then(() => loadBlogs());
     }
 
-    // 🟢 Gắn sự kiện click cho danh mục
     document.querySelectorAll('[data-category]').forEach(el => {
         el.addEventListener('click', e => {
             e.preventDefault();
@@ -229,8 +228,6 @@
             loadBlogs(cat);
         });
     });
-
-    // 🟢 Khi trang load lần đầu
     window.addEventListener('DOMContentLoaded', () => loadBlogs());
 </script>
 

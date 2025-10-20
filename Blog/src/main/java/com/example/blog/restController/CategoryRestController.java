@@ -1,4 +1,4 @@
-package com.example.blog.RestController;
+package com.example.blog.restController;
 import com.example.blog.entity.Category;
 import com.example.blog.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
