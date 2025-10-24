@@ -111,6 +111,7 @@
         opacity: 0.8;
     }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let currentCategory = ''; // lưu category hiện tại
     let currentPage = 0;      // lưu trang hiện tại
@@ -146,7 +147,6 @@
                         container.append(div);
                     });
                 }
-
                 renderPagination(data);
             }
         });
@@ -158,9 +158,12 @@
 
         const current = data.number;
         const total = data.totalPages;
+        const hasPrevious = !data.first; // Spring: first = true nếu là trang đầu
+        const hasNext = !data.last;      // Spring: last = true nếu là trang cuối
 
-        if (data.hasPrevious) {
-            const prev = $('<a href="#">⬅ Trước</a>');
+        // Nút Trước
+        if (hasPrevious) {
+            const prev = $('<a href="#">Trước</a>');
             prev.on('click', e => {
                 e.preventDefault();
                 loadBlogs(current - 1, currentCategory);
@@ -168,12 +171,11 @@
             container.append(prev);
         }
 
-        const span = $(`<span> ${current + 1} / ${total} </span>`);
-        container.append(span);
+        container.append(`<span> ${current + 1} / ${total} </span>`);
 
         // Nút Sau
-        if (data.hasNext) {
-            const next = $('<a href="#">Sau ➡</a>');
+        if (hasNext) {
+            const next = $('<a href="#">Sau</a>');
             next.on('click', e => {
                 e.preventDefault();
                 loadBlogs(current + 1, currentCategory);
@@ -223,7 +225,6 @@
         loadBlogs(0, cat);
     });
 
-    // 🟢 Khi trang vừa load
     $(document).ready(() => loadBlogs());
 </script>
 
