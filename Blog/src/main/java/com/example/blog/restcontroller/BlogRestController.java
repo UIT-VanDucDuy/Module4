@@ -1,4 +1,4 @@
-package com.example.blog.restController;
+package com.example.blog.restcontroller;
 
 import com.example.blog.entity.Blog;
 import com.example.blog.entity.Category;
